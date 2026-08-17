@@ -54,7 +54,14 @@
     --         ...
     --         else null                        -- nhóm 3
     --     end
-    try_cast({{ col }} as integer)
+    case
+        when {{ col }} in ('1', '2', '3', '4') then cast({{ col }} as integer)
+        when lower(trim({{ col }})) = 'urgent' then 1
+        when lower(trim({{ col }})) = 'high'   then 2
+        when lower(trim({{ col }})) = 'medium' then 3
+        when lower(trim({{ col }})) = 'low'    then 4
+        else null
+    end
 {% endmacro %}
 
 

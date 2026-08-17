@@ -25,6 +25,8 @@
 -- ---------------------------------------------------------------------------
 
 {{ config(
+    unique_key           = 'ticket_id',
+    incremental_strategy = 'delete+insert',
     materialized     = 'incremental',
     on_schema_change = 'fail'
 ) }}

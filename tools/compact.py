@@ -81,9 +81,19 @@ def main() -> int:
     #
     #   assert <số row dataset cũ> == <số row dataset mới>
 
-    print("\n  tools/compact.py chưa được hiện thực — đây là nhiệm vụ 4.")
-    print("  Mở file này, đọc phần KHUNG THỰC HIỆN ở đầu file và điền vào TODO.")
-    print("  Hướng dẫn từng bước: GUIDE.md mục 4.\n")
+    con.execute(f"""
+        copy (
+            select * from read_parquet('{SRC}/*.parquet')
+            order by customer_name, event_time
+        ) to '{DST}' (
+            format parquet,
+            partition_by (event_date),
+            overwrite_or_ignore,
+            row_group_size 10000
+        )
+    """)
+    n_dst = len(list(DST.rglob("*.parquet")))
+    print(f"  đích  : {DST}  ({n_dst:,} file)")
     return 0
 
 
